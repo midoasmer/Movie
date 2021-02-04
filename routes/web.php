@@ -17,4 +17,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('/Movie',"App\Http\Controllers\MovieController");
+Route::group(['middleware'=>'web'],function (){
+
+    Route::resource('/Movie',"App\Http\Controllers\MovieController");
+
+
+
+});
+
+

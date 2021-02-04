@@ -3,8 +3,6 @@
 @section('content')
 
     <form method="GET" action="/Movie/{{$movie->id}}/edit">
-{{--        <input type="hidden" name="_method" value="DELETE">--}}
-        @csrf
         <ul>
 
             <h1>Movie Name:  {{$movie->Name}}</h1><br>
@@ -16,13 +14,18 @@
         </ul>
         <input type="submit" value="Update">
     </form>
+    {!! Form::open(['method'=>'DELETE','action'=>['App\Http\Controllers\MovieController@destroy',$movie->id]]) !!}
+
+    {!! Form::submit('Delete Movie',['class'=>'btn btn-danger']) !!}
+
+    {!! Form:: close() !!}
 
 
-    <form method="post" action="/Movie/{{$movie->id}}">
-        <input type="hidden" name="_method" value="DELETE">
-        @csrf
-        <input type="submit" value="Delete">
-    </form>
+{{--    <form method="post" action="/Movie/{{$movie->id}}">--}}
+{{--        <input type="hidden" name="_method" value="DELETE">--}}
+{{--        @csrf--}}
+{{--        <input type="submit" value="Delete">--}}
+{{--    </form>--}}
 
 
     <form method="GET" action="/Movie">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreatMovieRequest;
 use App\Models\Actor;
 use App\Models\Director;
 use Illuminate\Http\Request;
@@ -48,8 +49,16 @@ class MovieController extends Controller
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      * @return array
      */
-    public function store(Request $request)
+    public function store(CreatMovieRequest $request)
     {
+//        $this->validate($request,[
+//
+//            'Name'          => 'required|unique:movies',
+//            'Director_Name' =>  'required',
+//            'Actor_Name'    =>  'required',
+//            'Description'   =>  'required',
+//            'Year'          =>  'required|integer',
+//        ]);
          $movie = new Movie();
          $actor = new Actor();
          $director = new Director();
@@ -58,8 +67,8 @@ class MovieController extends Controller
         $actor->save();
         $director->save();
         $movie->Name = $request->Name;
-        $movie->Actor_Id = $request->Actor_Name;
-        $movie->Director_Id = $request->Director_Name;
+        $movie->Actor_Id = $request->Actor_Id;
+        $movie->Director_Id = $request->Director_Id;
         $movie->Description = $request->Description;
         $movie->Year = $request->Year;
         $movie->save();
@@ -99,12 +108,12 @@ class MovieController extends Controller
      * @param  int  $id
      * @return string
      */
-    public function update(Request $request, $id)
+    public function update(CreatMovieRequest $request, $id)
     {
         $movie =  Movie ::findOrfail ($id);
         $movie->Name = $request->Name;
-        $movie->Actor_Id = $request->Actor_Name;
-        $movie->Director_Id = $request->Director_Name;
+        $movie->Actor_Id = $request->Actor_Id;
+        $movie->Director_Id = $request->Director_Id;
         $movie->Description = $request->Description;
         $movie->Year = $request->Year;
         $movie->save();

@@ -20,6 +20,8 @@ class CreateMoviesTable extends Migration
             $table->string('Actor_Id')->nullable();
             $table->string('Description');
             $table->integer('Year')->nullable();
+            $table->string('Image');
+            $table->integer('Rating')->default(0);
             $table->timestamps();
         });
     }

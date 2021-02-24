@@ -1,21 +1,93 @@
 @extends('App')
 
 @section('content')
-    <form >
-        @csrf
-        <ul>
+    @if(Session::has('created_movie'))
+        <p class="bg-danger">{{session('created_movie')}}</p>
+    @endif
 
-            @foreach($movies as $movie)
-                <li><a href="{{route('Movie.show',$movie->id)}}"> {{$movie->Name}}</a></li><br>
-{{--                <li>{{$movie->Actor_Id}}</li>--}}
-{{--                <li>{{$movie->Director_Id}}</li>--}}
-{{--                <li>{{$movie->Description}}</li>--}}
+    @if(Session::has('updated_movie'))
+        <p class="bg-danger">{{session('updated_movie')}}</p>
+    @endif
 
-            @endforeach
+    @if(Session::has('deleted_movie'))
+        <p class="bg-danger">{{session('deleted_movie')}}</p>
+    @endif
+    @csrf
+    {{--        <ul>--}}
+    {{--            @foreach($movies as $movie)--}}
+    {{--                <li><a href="{{route('Movie.show',$movie->id)}}"> {{$movie->Name}}</a></li><br>--}}
+    {{--               <form method="GET" action="/Movie/{{$movie->id}}/edit">--}}
+    {{--                <input type="submit" value="Update">--}}
+    {{--                </form>--}}
 
-        </ul>
+    {{--                {!! Form::open(['method'=>'DELETE','action'=>['App\Http\Controllers\MovieController@destroy',$movie->id]]) !!}--}}
+    {{--                {!! Form::submit('Delete Movie',['class'=>'btn btn-danger']) !!}--}}
+    {{--                {!! Form:: close() !!}--}}
+    {{--            @endforeach--}}
 
+    {{--        </ul>--}}
 
-    </form>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Photo</th>
+            <th>Movie Name</th>
+            <th>Actor Name</th>
+            <th>Actor Name</th>
+            <th>Actor Name</th>
+            <th>Director Name</th>
+            <th> Category</th>
+            <th>Description</th>
+            <th>Year</th>
+            <th>Rate</th>
+            @if(Auth::check())
+                <th>Rating</th>
+                @if(Auth::user()->isAdmin())
+                    <th>UpDate</th>
+                    <th>Delete</th>
+                @endif
+            @endif
+        </tr>
+        </thead>
+        <tbody>
+
+        @foreach($movies as $movie)
+            <tr>
+                <td>{{$movie->id}}</td>
+                <td><img height="50" src="{{$movie->photo ? $movie->photo->file :'http://placehold.it/50x50'}}"></td>
+                <td>{{$movie->Name}}</td>
+                <td>{{$movie->actor->Name}}</td>
+                <td>{{$movie->actor->Name}}</td>
+                <td>{{$movie->actor->Name}}</td>
+                <td>{{$movie->director->Name}}</td>
+                <td>{{$movie->category->Name}}</td>
+                <td>{{$movie->Description}}</td>
+                <td>{{$movie->Year}}</td>
+                <td>{{$movie->Rate->rate}}</td>
+                @if(Auth::check())
+                    <td>
+                        <form method="GET" action="/Movie/{{$movie->id}}/edit">
+                            <input type="submit" value="Rate">
+                        </form>
+                    </td>
+                @endif
+                @if(Auth::user()->isAdmin())
+                    <td>
+                        <form method="GET" action="/Movie/{{$movie->id}}/edit">
+                            <input type="submit" value="Update">
+                        </form>
+                    </td>
+                    <td>
+                        {!! Form::open(['method'=>'DELETE','action'=>['App\Http\Controllers\MovieController@destroy',$movie->id]]) !!}
+                        {!! Form::submit('Delete Movie',['class'=>'btn btn-danger']) !!}
+                        {!! Form:: close() !!}
+                    </td>
+                @endif
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
+    {{ $movies->links() }}
 @endsection
 

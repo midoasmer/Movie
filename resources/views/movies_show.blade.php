@@ -6,20 +6,18 @@
         <ul>
 
             <h1>Movie Name:  {{$movie->Name}}</h1><br>
-            <h1>Actor Name: {{$movie->Actor_Id}}</h1><br>
-            <h1>Director Name: {{$movie->Director_Id}}</h1><br>
+            <h1>Actor Name: {{$actor->Name}}</h1><br>
+            <h1>Director Name: {{$director->Name}}</h1><br>
             <h1>Descreption: {{$movie->Description}}</h1><br>
             <h1>Year: {{$movie->Year}}</h1><br>
+            <div class="image-container">
+
+                <img src="/images/{{$movie->Image}}">
+
+            </div>
 
         </ul>
-        <input type="submit" value="Update">
     </form>
-    {!! Form::open(['method'=>'DELETE','action'=>['App\Http\Controllers\MovieController@destroy',$movie->id]]) !!}
-
-    {!! Form::submit('Delete Movie',['class'=>'btn btn-danger']) !!}
-
-    {!! Form:: close() !!}
-
 
 {{--    <form method="post" action="/Movie/{{$movie->id}}">--}}
 {{--        <input type="hidden" name="_method" value="DELETE">--}}

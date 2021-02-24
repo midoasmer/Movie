@@ -9,15 +9,40 @@ class Movie extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'Name',
+        'Director_Name',
+        'Actor_Name',
+        'Description',
+        'Year' ,
+        'Image',
+        'Rating',
+        'Category_id'
+    ];
+
     public function actor()
     {
-        return $this->hasMany('App\Models\Actor');
+        return $this->belongsTo(Actor::class,'Actor_Id', 'id');
     }
 
     public function director()
     {
-        return $this->hasMany('App\Models\Director');
+        return $this->belongsTo(Director::class,'Director_Id', 'id');
     }
 
+    public function Rate()
+    {
 
+        return $this->belongsTo(Rating::class,'Rating', 'id');
+    }
+    public function photo()
+    {
+
+        return $this->belongsTo(Photo::class, 'Image', 'id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'Category_id', 'id');
+    }
 }

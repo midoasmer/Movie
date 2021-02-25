@@ -61,7 +61,6 @@
         @endif
 
         {{--        -----------------------------------------------------------------------------------------------------------------}}
-        <form>
             <table class="table table-bordered">
                 <thead>
                 <tr>
@@ -126,8 +125,8 @@
                 @endforeach
                 </tbody>
             </table>
-            {{ $movies->links() }}
-        </form>
+{{--            {{ $movies->links() }}--}}
+        {!! $movies->appends(Request::all())->links() !!}
         {{--        {!! $movies->render() !!}.--}}
     </ul>
 

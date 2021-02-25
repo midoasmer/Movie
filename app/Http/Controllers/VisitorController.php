@@ -23,7 +23,7 @@ class VisitorController extends Controller
 
     public function all_movie()
     {
-        $movies = Movie::all();
+        $movies = Movie::simplePaginate(5);
         return view('index', compact('movies'));
     }
 

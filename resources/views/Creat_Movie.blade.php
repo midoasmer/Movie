@@ -1,7 +1,7 @@
 @extends('App')
 @if(Auth::user()->isAdmin())
 @section('content')
-
+    <h1>Creat Movie</h1>
         {!! Form::open(['method'=>'POST','action'=>'App\Http\Controllers\MovieController@store','files'=>true]) !!}
         @csrf
         <div class="form-group">

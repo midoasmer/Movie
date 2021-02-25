@@ -1,6 +1,7 @@
 @extends('App')
 
 @section('content')
+    <h1>Creat Category</h1>
     {!! Form::open(['method'=>'POST','action'=>'App\Http\Controllers\CategoryController@store']) !!}
     @csrf
     <div class="form-group">

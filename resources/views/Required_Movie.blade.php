@@ -93,8 +93,8 @@
                         <td>{{$movie->Description}}</td>
                         <td>{{$movie->Year}}</td>
                         <td>{{$movie->Rating}}</td>
-                        {{--  @if(Auth::check())
-                             <td><select id="Rating" name="Rating" class="form-control">
+                          @if(Auth::check())
+                            {{-- <td><select id="Rating" name="Rating" class="form-control">
                                      <option value="Rate">{{$movie->Rating}}</option>
                                      @for ($i = 1; $i <= 10; $i++)
                                          <option value="Add_Rate">{{ $i }}</option>
@@ -120,6 +120,7 @@
                                 {!! Form::submit('Delete Movie',['class'=>'btn btn-danger']) !!}
                                 {!! Form:: close() !!}
                             </td>
+                        @endif
                         @endif
                     </tr>
                 @endforeach

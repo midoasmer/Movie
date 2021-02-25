@@ -1,7 +1,7 @@
 @extends('App')
 
 @section('content')
-
+    <h1>Creat Director</h1>
     {!! Form::open(['method'=>'POST','action'=>'App\Http\Controllers\DirectorController@store','files'=>true]) !!}
     @csrf
     <div class="form-group">

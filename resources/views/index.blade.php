@@ -71,7 +71,7 @@
                             <input type="submit" value="Rate">
                         </form>
                     </td>
-                @endif
+
                 @if(Auth::user()->isAdmin())
                     <td>
                         <form method="GET" action="/Movie/{{$movie->id}}/edit">
@@ -83,6 +83,7 @@
                         {!! Form::submit('Delete Movie',['class'=>'btn btn-danger']) !!}
                         {!! Form:: close() !!}
                     </td>
+                @endif
                 @endif
             </tr>
         @endforeach

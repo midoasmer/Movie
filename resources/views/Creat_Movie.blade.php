@@ -2,61 +2,64 @@
 @if(Auth::user()->isAdmin())
 @section('content')
     <h1>Creat Movie</h1>
-        {!! Form::open(['method'=>'POST','action'=>'App\Http\Controllers\MovieController@store','files'=>true]) !!}
-        @csrf
-        <div class="form-group">
-            {!! Form::label('Movie Name','Movie Name') !!}
-            {!! Form::text('Name',null,['class'=>'form-control']) !!}
+    {!! Form::open(['method'=>'POST','action'=>'App\Http\Controllers\MovieController@store','files'=>true]) !!}
+    @csrf
+    <div class="form-group">
+        {!! Form::label('Movie Name','Movie Name') !!}
+        {!! Form::text('Name',null,['class'=>'form-control']) !!}
 
-            {!! Form::label('Actor Name','Actor Name') !!}
-            <select name="Actor_Id" class="form-control">
-                @foreach ($actors as $actor)
-                    <option value="{{$actor->id}}">{{$actor->Name}}</option>
-                @endforeach
-            </select>
-            <br>
-            {!! Form::label('Director Name','Director Name') !!}
-            <select name="Director_Id" class="form-control">
-                @foreach ($directors as $director)
-                    <option value="{{$director->id}}">{{$director->Name}}</option>
-                @endforeach
-            </select>
-            <br>
-            {!! Form::label('Category','Category') !!}
-            <select name="Category_id" class="form-control">
-                @foreach ($categories as $category)
-                    <option value="{{$category->id}}">{{$category->Name}}</option>
-                @endforeach
-            </select>
-            <br>
-            {!! Form::label('Description','Description') !!}
-            {!! Form::text('Description',null,['class'=>'form-control']) !!}
+        {!! Form::label('Actor Name','Actor Name') !!}
+        <select name="Actor_Id" class="form-control" >
+            @foreach ($actors as $actor)
+                <option value="{{$actor->id}}">{{$actor->Name}}</option>
+            @endforeach
+        </select>
+{{--        <form id="anotherActor">--}}
+{{--            <button form="anotherActor" onclick="anotherActor">Add Another Actor</button>--}}
+{{--        </form>--}}
+        <br>
+        {!! Form::label('Director Name','Director Name') !!}
+        <select name="Director_Id" class="form-control">
+            @foreach ($directors as $director)
+                <option value="{{$director->id}}">{{$director->Name}}</option>
+            @endforeach
+        </select>
+        <br>
+        {!! Form::label('Category','Category') !!}
+        <select name="Category_id" class="form-control">
+            @foreach ($categories as $category)
+                <option value="{{$category->id}}">{{$category->Name}}</option>
+            @endforeach
+        </select>
+        <br>
+        {!! Form::label('Description','Description') !!}
+        {!! Form::text('Description',null,['class'=>'form-control']) !!}
 
-            {!! Form::label('Year','Year') !!}
-            <select id="Year" name="Year" class="form-control ">
-                {{ $last= date('Y')-120 }}
-                {{ $now = date('Y') }}
-                @for ($i = $now; $i >= $last; $i--)
-                    <option value="{{ $i }}">{{ $i }}</option>
-                @endfor
-            </select>
+        {!! Form::label('Year','Year') !!}
+        <select id="Year" name="Year" class="form-control ">
+            {{ $last= date('Y')-120 }}
+            {{ $now = date('Y') }}
+            @for ($i = $now; $i >= $last; $i--)
+                <option value="{{ $i }}">{{ $i }}</option>
+            @endfor
+        </select>
+    </div>
+    <br>
+    {!! Form::file('image',['class'=>'form-control']) !!}
+    <br>
+    {!! Form::submit('Save Movie',['class'=>'btn btn-primary']) !!}
+
+    {!! Form:: close() !!}
+
+    @if(count($errors)>0)
+        <div class="alert alert-danger">
+            <ul>
+                @foreach($errors->all() as $error)
+                    <li>{{$error}}</li>
+                @endforeach
+            </ul>
         </div>
-        <br>
-        {!! Form::file('image',['class'=>'form-control']) !!}
-        <br>
-        {!! Form::submit('Save Movie',['class'=>'btn btn-primary']) !!}
-
-        {!! Form:: close() !!}
-
-        @if(count($errors)>0)
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach($errors->all() as $error)
-                        <li>{{$error}}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+    @endif
 
     {{--<form method="post" action="/Movie">--}}
     {{--   @csrf--}}
@@ -73,6 +76,12 @@
     <script>
         window.location = "/";
         {{Session::flash('no_permetion','You Dont Have Apermation')}}
+    </script>
+    <script>
+        function anotherActor() {
+            var btn = document.createElement("BUTTON");
+            document.body.appendChild(btn);
+        }
     </script>
 @endif
 

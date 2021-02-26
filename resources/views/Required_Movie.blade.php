@@ -1,9 +1,10 @@
 @extends('App')
 
 @section('content')
+    <h1>Movies Search</h1>
     @csrf
     <ul>
-        {!! Form::open(array('method'=>'GET','action'=>'App\Http\Controllers\SearchController@show')) !!}
+        {!! Form::open(array('method'=>'GET','action'=>'App\Http\Controllers\SearchController@ShowMovie')) !!}
         <table style="width:100%">
             <tr>
                 <th>Actor Name</th>

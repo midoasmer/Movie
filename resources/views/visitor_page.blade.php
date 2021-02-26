@@ -8,7 +8,7 @@
         <p class = "bg-danger">{{session('no_permetion')}}</p>
     @endif
 
-    {!! Form::open(array('method'=>'GET','action'=>'App\Http\Controllers\SearchController@show')) !!}
+    {!! Form::open(array('method'=>'GET','action'=>'App\Http\Controllers\SearchController@ShowMovie')) !!}
     <table style="width:100%">
         <tr>
             <th>Actor Name</th>

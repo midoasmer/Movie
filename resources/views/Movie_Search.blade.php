@@ -1,7 +1,8 @@
 @extends('App')
 
 @section('content')
-    {!! Form::open(array('method'=>'GET','action'=>'App\Http\Controllers\SearchController@show')) !!}
+    <h1>Movies Search</h1>
+    {!! Form::open(array('method'=>'GET','action'=>'App\Http\Controllers\SearchController@ShowMovie')) !!}
     <table style="width:100%">
         <tr>
             <th>Actor Name</th>

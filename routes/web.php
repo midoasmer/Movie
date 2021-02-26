@@ -18,8 +18,10 @@ Route::get('/', "App\Http\Controllers\VisitorController@index");
 Route::get('/all', "App\Http\Controllers\VisitorController@all_movie");
 Route::get('/Rating/{movie_id}/{id}','App\Http\Controllers\RatingController@RatingMovie');
 
-Route::get('/Search', "App\Http\Controllers\SearchController@Search");
-Route::get('/Search/show', 'App\Http\Controllers\SearchController@show');
+Route::get('/SearchMovie', "App\Http\Controllers\SearchController@SearchMovie");
+Route::get('/SearchActor', "App\Http\Controllers\SearchController@SearchActor");
+Route::get('/Search/ShowMovie', 'App\Http\Controllers\SearchController@ShowMovie');
+Route::get('/SearchActor/ShowActor', "App\Http\Controllers\SearchController@ShowActor");
 //Route::get('/Search/Movie', "App\Http\Controllers\SearchController");
 //Route::get('/Search/Movie', "App\Http\Controllers\SearchController");
 //Route::resource('/Search',"App\Http\Controllers\MovieSearchController");

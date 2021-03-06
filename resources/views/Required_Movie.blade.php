@@ -15,7 +15,7 @@
             <tr>
                 <th>
                     <select name="Actor_Id" class="form-control">
-                        <option value="{{$actor->id}}">{{$actor->Name}}</option>
+                        <option value="{{$movies[0]->actor->id}}">{{$movies[0]->actor->Name}}</option>
                         @foreach ($actors as $actor1)
                             <option value="{{$actor1->id}}">{{$actor1->Name}}</option>
                         @endforeach
@@ -23,7 +23,7 @@
                 </th>
                 <th>
                     <select name="Director_Id" class="form-control">
-                        <option value="{{$director->id}}">{{$director->Name}}</option>
+                        <option value="{{$movies[0]->director->id}}">{{$movies[0]->director->Name}}</option>
                         @foreach ($directors as $director1)
                             <option value="{{$director1->id}}">{{$director1->Name}}</option>
                         @endforeach
@@ -88,9 +88,9 @@
                         <td>{{$movie->id}}</td>
                         <td>{{$movie->Name}}</td>
                         {{--                    <td>{{$actor->Name}}</td>--}}
-                        <td>{{$actor->Name}}</td>
-                        <td>{{$actor->Name}}</td>
-                        <td>{{$director->Name}}</td>
+                        <td>{{$movie->actor->Name}}</td>
+                        <td>{{$movie->actor->Name}}</td>
+                        <td>{{$movie->director->Name}}</td>
                         <td>{{$movie->Description}}</td>
                         <td>{{$movie->Year}}</td>
                         <td>{{$movie->Rating}}</td>

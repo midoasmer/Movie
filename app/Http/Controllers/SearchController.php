@@ -38,7 +38,7 @@ class SearchController extends Controller
 //        dd($movies);
         $directors = Director::all();
         $actors = Actor::all();
-        $movies = DB::table('movies')->where('Actor_ID', '=', $request->Actor_Id)
+        $movies = Movie::where('Actor_ID', '=', $request->Actor_Id)
             ->where('Director_id', '=', $request->Director_Id)
             ->whereBetween('Year', [$request->EndYear, $request->StartYear])->simplePaginate(5);
         //$movies = $movies->simplePaginate(2);
@@ -48,15 +48,12 @@ class SearchController extends Controller
         $endyear = $request->EndYear;
 //        $movies[] = new Movie();
 //        $movies=$allmovies;
-        return view('Required_Movie', compact('movies'), compact('actor'))
-            ->with(compact('director'))
+        return view('Required_Movie', compact('movies'))
             ->with(compact('directors'))
             ->with(compact('actors'))
             ->with(compact('startyear'))
             ->with(compact('endyear'));
     }
-
-
     public function ShowActor(Request $request)
     {
         $movies = Movie::all();

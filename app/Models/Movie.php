@@ -30,11 +30,6 @@ class Movie extends Model
         return $this->belongsTo(Director::class,'Director_Id', 'id');
     }
 
-    public function Rate()
-    {
-
-        return $this->belongsTo(Rating::class,'Rating', 'id');
-    }
     public function photo()
     {
 

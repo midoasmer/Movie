@@ -11,13 +11,12 @@ class Rating extends Model
 
     public function movie()
     {
-
-        return $this->belongsTo(Movie::class);
+        return $this->belongsToMany(Movie::class);
     }
 
-    public function movies()
+    public function user()
     {
-        return $this->hasMany(Movie::class);
+        return $this->belongsToMany(User::class);
     }
 
 }

@@ -11,6 +11,7 @@
 
             {!! Form::label('Actor Name','Actor Name') !!}
             <select name="Actor_Id" class="form-control">
+                <option value="{{$movie->actor->id}}">{{$movie->actor->Name}}</option>
                 @foreach ($actors as $actor)
                     <option value="{{$actor->id}}">{{$actor->Name}}</option>
                 @endforeach
@@ -18,8 +19,17 @@
             <br>
             {!! Form::label('Director Name','Director Name') !!}
             <select name="Director_Id" class="form-control">
+                <option value="{{$movie->director->id}}">{{$movie->director->Name}}</option>
                 @foreach ($directors as $director)
                     <option value="{{$director->id}}">{{$director->Name}}</option>
+                @endforeach
+            </select>
+            <br>
+            {!! Form::label('Category','Category') !!}
+            <select name="Category_id" class="form-control">
+                <option value="{{$movie->category->id}}">{{$movie->category->Name}}</option>
+                @foreach ($categories as $category)
+                    <option value="{{$category->id}}">{{$category->Name}}</option>
                 @endforeach
             </select>
             <br>
@@ -37,8 +47,15 @@
                 @endfor
             </select>
         @endif
-        {!! Form::label('Rate','Rate : '.$movie->Rate->rate) !!}
+        {!! Form::label('Review','Review') !!}
+        {!! Form::text('Review',null,['class'=>'form-control']) !!}
+        {!! Form::label('Rate','Your Rate : '.$rate) !!}
         <select id="Rate" name="Rate" class="form-control">
+            @if($rate==="Not Rated")
+                <option value="No Rate">No Rate</option>
+            @else
+                <option value={{$rate}}>{{$rate}}</option>
+            @endif
             @for ($i = 1; $i <= 10; $i++)
                 <option value={{$i}}>{{ $i }}</option>
             @endfor

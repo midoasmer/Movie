@@ -10,6 +10,7 @@ use App\Models\Movie;
 use App\Models\Photo;
 use App\Models\Rating;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
@@ -51,7 +52,7 @@ class MovieController extends Controller
      */
     public function store(CreatMovieRequest $request)
     {
-        $rate = new Rating();
+        //Cheich if the new movie have an photo
         if ($file = $request->file('image')) {
             $name = time() . $file->getClientOriginalName();
             $file->move('images', $name);
@@ -60,17 +61,17 @@ class MovieController extends Controller
         } else {
             $request['Image'] = 'Non';
         }
-       // $request['Category_id']->$request->Category_id;
+        //int the rating value
         $request['Rating'] = '0';
-        $movie = Movie::create($request->all());
-        $rate->movie_id = $movie->id;
-        $rate->rate = '0';
-        $rate->number_of_rated_users = '0';
-        $rate->save();
-        $rate = Rating::where('movie_id', $movie->id)->get();
-        $request->Rating = $rate[0]->id;
+        $movie = new Movie();
+        //Store all data in new movie
+        $movie->Name = $request->Name;
         $movie->Director_Id = $request->Director_Id;
         $movie->Actor_Id = $request->Actor_Id;
+        $movie->Category_id = $request->Category_id;
+        $movie->Description = $request->Description;
+        $movie->Year = $request->Year;
+        $movie->Image = $request->Image;
         $movie->Rating = $request->Rating;
         $movie->save();
 
@@ -102,10 +103,25 @@ class MovieController extends Controller
      */
     public function edit($id)
     {
+        $user = Auth::user();
+        // geting user rate to display
+        if ($check = Rating::where('movie_id', $id)->where('user_id', $user->id)->exists()) {
+            $rate = Rating::where('movie_id', $id)
+                ->where('user_id', $user->id)
+                ->first();
+            $rate = $rate->rate;
+        } else {
+            $rate = "Not Rated";
+        }
+        //geting all actors ,directors and categories to display in list
         $directors = Director::all();
         $actors = Actor::all();
+        $categories = Category::all();
         $movie = Movie::findOrfail($id);
-        return view('Edite_Movie', compact('movie'), compact('actors'))->with(compact('directors'));
+        return view('Edite_Movie', compact('movie'), compact('actors'))
+            ->with(compact('directors'))
+            ->with(compact('categories'))
+            ->with(compact('rate'));
     }
 
     /**
@@ -115,36 +131,52 @@ class MovieController extends Controller
      * @param int $id
      * @return string
      */
-    public function update(CreatMovieRequest $request, $id)
+    public function update(Request $request, $id)
     {
         $movie = Movie::findOrfail($id);
+        $user = Auth::user();
 
+        //check if the request have photo or not
         if ($file = $request->file('image')) {
             $name = time() . $file->getClientOriginalName();
             $file->move('images', $name);
             $photo = Photo::create(['file' => $name]);
-            $request['Image'] = $photo->id;
+            $request['Image'] = $photo->Image;
+        } else {
+            $request['Image'] = $movie->id;
         }
-        $rate = Rating::where('movie_id', $movie->id)->get();
-        $users = $rate[0]->number_of_rated_users + 1;
-        $newrate = (double)($rate[0]->rate + (double)$request->Rate) / (double)$users;
-        $newrate = number_format((float)$newrate, 1, '.', '');
-        $this->newRate($rate[0]->id, $newrate, $users);
-        $movie->update($request->all());
-//        if ($file = $request->file('image')) {
-//
-//            $request['Image'] = $file->getClientOriginalName();
-//            $file->move('images', $request->Image);
-//            $movie->Image = $request->Image;
-//        }
-//
-//        $movie->Name = $request->Name;
-//        $movie->Actor_Id = $request->Actor_Id;
-//        $movie->Director_Id = $request->Director_Id;
-//        $movie->Description = $request->Description;
-//        $movie->Year = $request->Year;
-//        $movie->save();
-//        $id=$movie->id;
+        //check if user select rate or not
+        if ($request->Rate !== "No Rate") {
+            //check if the user had rated this movie be for or not
+            if ($check = Rating::where('movie_id', $movie->id)->where('user_id', $user->id)->exists()) {
+                Rating::where('movie_id', $movie->id)
+                    ->where('user_id', $user->id)
+                    ->update(['rate' => $request->Rate]);
+                //function to sum the new rate
+                $newRate = $this->newRate($movie->id);
+            } else {
+                $rate = new Rating();
+                $rate->movie_id = $movie->id;
+                $rate->user_id = $user->id;
+                $rate->rate = $request->Rate;
+                if($request->filled( 'Review')){$rate->review = $request->Review;}
+                else{$rate->review ="No Review";}
+                $rate->save();
+                $newRate = $this->newRate($movie->id);
+            }
+        } else {
+            $newRate = $movie->Rating;
+        }
+        $movie->update([
+            'Name' => $request->Name,
+            'Director_Id' => $request->Director_Id,
+            'Actor_Id' => $request->Actor_Id,
+            'Description' => $request->Description,
+            'Category_id' => $request->Category_id,
+            'Year' => $request->Year,
+            'Image' => $request->Image,
+            'Rating' => $newRate
+        ]);
         Session::flash('updated_movie', $request->Name . ' : has been updated');
         return redirect('/Movie');
 
@@ -168,10 +200,11 @@ class MovieController extends Controller
         return redirect('/Movie');
     }
 
-    public function newRate($id, $rate, $users)
+    public function newRate($movie_id)
     {
-
-        //$movie = Movie::findOrfail($id);
-        Rating::where('id', $id)->update(['rate' => $rate, 'number_of_rated_users' => $users]);
+        $sum = Rating::where('movie_id', $movie_id)->sum('rate');
+        $count = Rating::where('movie_id', $movie_id)->count();
+        $rate = $sum / $count;
+        return $rate;
     }
 }

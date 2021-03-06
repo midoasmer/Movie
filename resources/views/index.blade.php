@@ -64,7 +64,7 @@
                 <td>{{$movie->category->Name}}</td>
                 <td>{{$movie->Description}}</td>
                 <td>{{$movie->Year}}</td>
-                <td>{{$movie->Rate->rate}}</td>
+                <td>{{$movie->Rating}}</td>
                 @if(Auth::check())
                     <td>
                         <form method="GET" action="/Movie/{{$movie->id}}/edit">

@@ -16,8 +16,9 @@ class CreateRatingsTable extends Migration
         Schema::create('ratings', function (Blueprint $table) {
             $table->id();
             $table->integer('movie_id');
-            $table->double('rate');
-            $table->integer('number_of_rated_users');
+            $table->integer('user_id');
+            $table->integer('rate');
+            $table->string('review');
             $table->timestamps();
         });
     }

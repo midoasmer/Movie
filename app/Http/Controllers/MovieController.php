@@ -92,7 +92,8 @@ class MovieController extends Controller
         $actor = Actor::findOrfail($movie->Actor_Id);
         $director = Director::findOrfail($movie->Director_Id);
 
-        return view('movies_show', compact('movie'), compact('actor'))->with(compact('director'));
+        return view('movies_show', compact('movie'), compact('actor'))
+            ->with(compact('director'));
     }
 
     /**
@@ -109,9 +110,12 @@ class MovieController extends Controller
             $rate = Rating::where('movie_id', $id)
                 ->where('user_id', $user->id)
                 ->first();
+            $review = $rate->review;
             $rate = $rate->rate;
+
         } else {
             $rate = "Not Rated";
+            $review = "No Review";
         }
         //geting all actors ,directors and categories to display in list
         $directors = Director::all();
@@ -121,7 +125,8 @@ class MovieController extends Controller
         return view('Edite_Movie', compact('movie'), compact('actors'))
             ->with(compact('directors'))
             ->with(compact('categories'))
-            ->with(compact('rate'));
+            ->with(compact('rate'))
+            ->with(compact('review'));
     }
 
     /**
@@ -135,23 +140,41 @@ class MovieController extends Controller
     {
         $movie = Movie::findOrfail($id);
         $user = Auth::user();
-
-        //check if the request have photo or not
-        if ($file = $request->file('image')) {
-            $name = time() . $file->getClientOriginalName();
-            $file->move('images', $name);
-            $photo = Photo::create(['file' => $name]);
-            $request['Image'] = $photo->Image;
-        } else {
-            $request['Image'] = $movie->id;
+        //check if the movie have photo or not
+        if ($movie->Image === 'Non') {
+            //if movie dont have photo check if the user add photo or not
+            if ($file = $request->file('image')) {
+                $name = time() . $file->getClientOriginalName();
+                $file->move('images', $name);
+                $photo = Photo::create(['file' => $name]);
+                $request['Image'] = $photo->id;
+                $movie->update([
+                    'Image' => $photo->id,
+                ]);
+            }
+        }
+        //if movie have photo check if the user edit the photo or not
+        else{
+            if ($file = $request->file('image')){
+                $name = time() . $file->getClientOriginalName();
+                $file->move('images', $name);
+                $photo = Photo::findOrfail($movie->Image);
+                unlink(public_path().$photo->file);
+                $photo->update([
+                    'file' => $name,
+                ]);
+            }
         }
         //check if user select rate or not
         if ($request->Rate !== "No Rate") {
-            //check if the user had rated this movie be for or not
+            //check if the user had rated this movie before or not
             if ($check = Rating::where('movie_id', $movie->id)->where('user_id', $user->id)->exists()) {
                 Rating::where('movie_id', $movie->id)
                     ->where('user_id', $user->id)
-                    ->update(['rate' => $request->Rate]);
+                    ->update([
+                        'rate' => $request->Rate,
+                        'Review' => $request->Review
+                    ]);
                 //function to sum the new rate
                 $newRate = $this->newRate($movie->id);
             } else {
@@ -159,8 +182,11 @@ class MovieController extends Controller
                 $rate->movie_id = $movie->id;
                 $rate->user_id = $user->id;
                 $rate->rate = $request->Rate;
-                if($request->filled( 'Review')){$rate->review = $request->Review;}
-                else{$rate->review ="No Review";}
+                if ($request->filled('Review')) {
+                    $rate->review = $request->Review;
+                } else {
+                    $rate->review = "No Review";
+                }
                 $rate->save();
                 $newRate = $this->newRate($movie->id);
             }
@@ -174,7 +200,6 @@ class MovieController extends Controller
             'Description' => $request->Description,
             'Category_id' => $request->Category_id,
             'Year' => $request->Year,
-            'Image' => $request->Image,
             'Rating' => $newRate
         ]);
         Session::flash('updated_movie', $request->Name . ' : has been updated');
@@ -192,6 +217,7 @@ class MovieController extends Controller
     {
         $movie = Movie::findOrfail($id);
         if ($movie->Image) {
+            unlink(public_path().$movie->photo->file);
             Photo::where('id', '=', $movie->Image)->delete();
         }
         Movie::where('id', '=', $id)->delete();
@@ -205,6 +231,6 @@ class MovieController extends Controller
         $sum = Rating::where('movie_id', $movie_id)->sum('rate');
         $count = Rating::where('movie_id', $movie_id)->count();
         $rate = $sum / $count;
-        return $rate;
+        return number_format((float)$rate, 1, '.', '');;
     }
 }

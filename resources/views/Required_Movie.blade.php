@@ -62,54 +62,49 @@
         @endif
 
         {{--        -----------------------------------------------------------------------------------------------------------------}}
-            <table class="table table-bordered">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Movie Name</th>
-                    <th>Actor Name</th>
-                    {{--                <th>Actor Name</th>--}}
-                    <th>Actor Name</th>
-                    <th>Director Name</th>
-                    <th>Description</th>
-                    <th>Year</th>
-                    <th>Rate</th>
-                    @if(Auth::check())
-                        @if(Auth::user()->isAdmin())
-                            <th>UpDate</th>
-                            <th>Delete</th>
-                        @endif
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Photo</th>
+                <th>Movie Name</th>
+                <th>Actor Name</th>
+                <th>Actor Name</th>
+                <th>Actor Name</th>
+                <th>Director Name</th>
+                <th> Category</th>
+                <th>Description</th>
+                <th>Year</th>
+                <th>Rate</th>
+                @if(Auth::check())
+                    <th>Rating</th>
+                    @if(Auth::user()->isAdmin())
+                        <th>UpDate</th>
+                        <th>Delete</th>
                     @endif
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($movies as $movie)
-                    <tr>
-                        <td>{{$movie->id}}</td>
-                        <td>{{$movie->Name}}</td>
-                        {{--                    <td>{{$actor->Name}}</td>--}}
-                        <td>{{$movie->actor->Name}}</td>
-                        <td>{{$movie->actor->Name}}</td>
-                        <td>{{$movie->director->Name}}</td>
-                        <td>{{$movie->Description}}</td>
-                        <td>{{$movie->Year}}</td>
-                        <td>{{$movie->Rating}}</td>
-                          @if(Auth::check())
-                            {{-- <td><select id="Rating" name="Rating" class="form-control">
-                                     <option value="Rate">{{$movie->Rating}}</option>
-                                     @for ($i = 1; $i <= 10; $i++)
-                                         <option value="Add_Rate">{{ $i }}</option>
-                                     @endfor
-                                 </select></td>
-                         @else
-                             <td>{{$movie->Rating}}</td>
-                         @endif
-                         @if(Auth::check())
-                             <td>
-                                 <form method="GET" action="/Movie/{{$movie->id}}/edit">
-                                     <input type="submit" value="Rate">
-                                 </form>
-                             </td> --}}
+                @endif
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($movies as $movie)
+                <tr>
+                    <td>{{$movie->id}}</td>
+                    <td><img height="50" src="{{$movie->photo ? $movie->photo->file :'http://placehold.it/50x50'}}"></td>
+                    <td>{{$movie->Name}}</td>
+                    <td>{{$movie->actor->Name}}</td>
+                    <td>{{$movie->actor->Name}}</td>
+                    <td>{{$movie->actor->Name}}</td>
+                    <td>{{$movie->director->Name}}</td>
+                    <td>{{$movie->category->Name}}</td>
+                    <td>{{$movie->Description}}</td>
+                    <td>{{$movie->Year}}</td>
+                    <td>{{$movie->Rating}}</td>
+                    @if(Auth::check())
+                        <td>
+                            <form method="GET" action="/EditRating/{{$movie->id}}">
+                                <input type="submit" value="Rate">
+                            </form>
+                        </td>
                         @if(Auth::user()->isAdmin())
                             <td>
                                 <form method="GET" action="/Movie/{{$movie->id}}/edit">
@@ -122,12 +117,12 @@
                                 {!! Form:: close() !!}
                             </td>
                         @endif
-                        @endif
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
-{{--            {{ $movies->links() }}--}}
+                    @endif
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+        {{--            {{ $movies->links() }}--}}
         {!! $movies->appends(Request::all())->links() !!}
         {{--        {!! $movies->render() !!}.--}}
     </ul>

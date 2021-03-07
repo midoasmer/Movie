@@ -16,7 +16,8 @@ Use Carbon\Carbon;
 
 Route::get('/', "App\Http\Controllers\VisitorController@index");
 Route::get('/all', "App\Http\Controllers\VisitorController@all_movie");
-Route::get('/Rating/{movie_id}/{id}','App\Http\Controllers\RatingController@RatingMovie');
+Route::get('/EditRating/{id}','App\Http\Controllers\RatingController@edit');
+Route::get('/Rating','App\Http\Controllers\RatingController@RatingMovie');
 
 Route::get('/SearchMovie', "App\Http\Controllers\SearchController@SearchMovie");
 Route::get('/SearchActor', "App\Http\Controllers\SearchController@SearchActor");
@@ -54,9 +55,9 @@ Route::group(['middleware'=>'admin'],function (){
 //Route::resource('/Director',"App\Http\Controllers\DirectorController");
 
 //test route
-Route::get('/Categor', function () {
-    return view('Creat_Category');
-});
+//Route::get('/rate', function () {
+//    return view('Rating');
+//});
 
 
 

@@ -46,8 +46,6 @@ class SearchController extends Controller
         $director = Director::findOrfail($request->Director_Id);
         $startyear = $request->StartYear;
         $endyear = $request->EndYear;
-//        $movies[] = new Movie();
-//        $movies=$allmovies;
         return view('Required_Movie', compact('movies'))
             ->with(compact('directors'))
             ->with(compact('actors'))

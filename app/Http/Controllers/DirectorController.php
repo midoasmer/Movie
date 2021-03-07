@@ -137,6 +137,7 @@ class DirectorController extends Controller
         $director = Director::findOrfail($id);
         if($director->Image)
         {
+            unlink(public_path().$director->photo->file);
             Photo::where('id','=',$director->Image)->delete();
         }
         Director::where('id', '=', $id)->delete();

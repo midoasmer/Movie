@@ -139,6 +139,7 @@ class ActorController extends Controller
         $actor = Actor::findOrfail($id);
         if($actor->Image)
         {
+            unlink(public_path().$actor->photo->file);
             Photo::where('id','=',$actor->Image)->delete();
         }
         Actor::where('id', '=', $id)->delete();

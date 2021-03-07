@@ -46,9 +46,9 @@
                     <a href="/login" class="nav-link">Login</a>
                 </li>
             @endif
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="#" class="nav-link">Contact</a>
-                </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="#" class="nav-link">Contact</a>
+            </li>
         </ul>
 
         <!-- SEARCH FORM -->
@@ -211,61 +211,18 @@
                         data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
                              with font-awesome or any other icon font library -->
-                        <li class="nav-item menu-open">
-                            <a href="#" class="nav-link active">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    {{--       -----------------------------------------------------------------------------------------------------------------                         --}}
-                                    Dashboard
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="/Actor/create" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Create Actor</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/Director/create" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Create Director</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{route('users.create')}}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Create User</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/Movie/create" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Create Movie</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href={{route('Category.create')}} class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Create Category</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/SearchMovie" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Search Movie</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/SearchActor" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Search Actor</p>
-                                    </a>
-                                </li>
-
-                            </ul>
-                        </li>
+{{--                        <li class="nav-item menu-open">--}}
+{{--                            <a href="#" class="nav-link active">--}}
+{{--                                <i class="nav-icon fas fa-tachometer-alt"></i>--}}
+{{--                                <p>--}}
+{{--                                    --}}{{--       -----------------------------------------------------------------------------------------------------------------                         --}}
+{{--                                    Dashboard--}}
+{{--                                    <i class="right fas fa-angle-left"></i>--}}
+{{--                                </p>--}}
+{{--                            </a>--}}
+{{--                            <ul class="nav nav-treeview">--}}
+{{--                            </ul>--}}
+{{--                        </li>--}}
                         {{--                    <li class="nav-item">--}}
                         {{--                        <a href="pages/widgets.html" class="nav-link">--}}
                         {{--                            <i class="nav-icon fas fa-th"></i>--}}
@@ -279,22 +236,15 @@
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>
-                                    Users Control
+                                    User
                                     <i class="fas fa-angle-left right"></i>
-                                    {{--                                <span class="badge badge-info right">6</span>--}}
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{route('Actor.index')}}" class="nav-link">
+                                    <a href="{{route('users.create')}}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>All Actors</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{route('Director.index')}}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>All Directors</p>
+                                        <p>Create User</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -303,10 +253,102 @@
                                         <p>All Users</p>
                                     </a>
                                 </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-copy"></i>
+                                <p>
+                                    Actor
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="/Actor/create" class="nav-link active">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Create Actor</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/SearchActor" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Search Actor</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('Actor.index')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>All Actors</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-copy"></i>
+                                <p>
+                                    Director
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="/Director/create" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Create Director</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('Director.index')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>All Directors</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-copy"></i>
+                                <p>
+                                    Movie
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="/Movie/create" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Create Movie</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/SearchMovie" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Search Movie</p>
+                                    </a>
+                                </li>
                                 <li class="nav-item">
                                     <a href="/Movie" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>All Movie</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-copy"></i>
+                                <p>
+                                    Category
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href={{route('Category.create')}} class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Create Category</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -317,6 +359,19 @@
                                 </li>
                             </ul>
                         </li>
+{{--                        <li class="nav-item">--}}
+{{--                            <a href="#" class="nav-link">--}}
+{{--                                <i class="nav-icon fas fa-copy"></i>--}}
+{{--                                <p>--}}
+{{--                                    Users Control--}}
+{{--                                    <i class="fas fa-angle-left right"></i>--}}
+{{--                                    --}}{{--                                <span class="badge badge-info right">6</span>--}}
+{{--                                </p>--}}
+{{--                            </a>--}}
+{{--                            <ul class="nav nav-treeview">--}}
+
+{{--                            </ul>--}}
+{{--                        </li>--}}
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-chart-pie"></i>
@@ -865,7 +920,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Dashboard</h1>
+{{--                        <h1 class="m-0">Dashboard</h1>--}}
                     </div><!-- /.col -->
                     @if(Auth::check())
                         <div class="col-sm-6">
@@ -875,7 +930,6 @@
                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                         {{ Auth::user()->name }}
                                     </a>
-
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                         <a class="dropdown-item" href="{{ route('logout') }}"
                                            onclick="event.preventDefault();

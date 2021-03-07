@@ -11,6 +11,9 @@
 @if(Session::has('deleted_category'))
     <p class = "bg-danger">{{session('deleted_category')}}</p>
 @endif
+@if(Session::has('cant_delete'))
+    <p class = "bg-danger">{{session('cant_delete')}}</p>
+@endif
 @csrf
 <h1>Categories</h1>
 <table class="table table-bordered">

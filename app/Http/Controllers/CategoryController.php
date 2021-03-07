@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Movie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -100,8 +101,14 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $category = Category::findOrfail($id);
-        Category::where('id', '=', $id)->delete();
-        Session::flash('deleted_category', $category->Name . ' : Category has been deleted');
-        return redirect('/Category');
+        if ($movie = Movie::where('Category_id', '=', $id)->exists()) {
+            Session::flash('cant_delete', $category->Name . ' : There is a Movies Have This Category So Can not Delete it');
+            return redirect('/Category');
+        } else {
+            $category = Category::findOrfail($id);
+            Category::where('id', '=', $id)->delete();
+            Session::flash('deleted_category', $category->Name . ' : Category has been deleted');
+            return redirect('/Category');
+        }
     }
 }

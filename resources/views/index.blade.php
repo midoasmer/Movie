@@ -67,15 +67,14 @@
                 <td>{{$movie->Rating}}</td>
                 @if(Auth::check())
                     <td>
-                        <form method="GET" action="/Movie/{{$movie->id}}/edit">
+                        <form method="GET" action="/EditRating/{{$movie->id}}">
                             <input type="submit" value="Rate">
                         </form>
                     </td>
-
                 @if(Auth::user()->isAdmin())
                     <td>
                         <form method="GET" action="/Movie/{{$movie->id}}/edit">
-                            <input type="submit" value="Update">
+                            <input type="submit" value="Update" class='btn btn-primary'>
                         </form>
                     </td>
                     <td>

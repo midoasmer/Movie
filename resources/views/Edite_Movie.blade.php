@@ -48,7 +48,7 @@
             </select>
         @endif
         {!! Form::label('Review','Review') !!}
-        {!! Form::text('Review',null,['class'=>'form-control']) !!}
+        {!! Form::text('Review',value($review),['class'=>'form-control']) !!}
         {!! Form::label('Rate','Your Rate : '.$rate) !!}
         <select id="Rate" name="Rate" class="form-control">
             @if($rate==="Not Rated")
@@ -82,6 +82,4 @@
         </div>
     @endif
 @endsection
-
-
 

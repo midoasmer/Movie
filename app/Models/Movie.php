@@ -40,4 +40,9 @@ class Movie extends Model
     {
         return $this->belongsTo(Category::class, 'Category_id', 'id');
     }
+
+    public function actors()
+    {
+        return $this->belongsToMany(Actor::class);
+    }
 }

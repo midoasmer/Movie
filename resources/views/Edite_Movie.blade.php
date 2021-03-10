@@ -8,14 +8,53 @@
         @if(Auth::user()->isAdmin())
             {!! Form::label('Movie Name','Movie Name') !!}
             {!! Form::text('Name',null,['class'=>'form-control']) !!}
+            <div id="add" class="form-group">
+                <script>
+                    var n = 0;
 
-            {!! Form::label('Actor Name','Actor Name') !!}
-            <select name="Actor_Id" class="form-control">
-                <option value="{{$movie->actor->id}}">{{$movie->actor->Name}}</option>
-                @foreach ($actors as $actor)
-                    <option value="{{$actor->id}}">{{$actor->Name}}</option>
+                    function anotherActor(id,name1) {
+                        "use strict";
+                        if (n < 3) {
+                            var input = document.createElement("SELECT");
+                            input.setAttribute("id", "mySelect" + n);
+                            input.setAttribute('name', 'Actor' + n);
+                            input.setAttribute('class', "form-control");
+                            var parent = document.getElementById("add");
+                            parent.appendChild(input);
+                            var a = document.createElement("option");
+                            a.setAttribute("value", id);
+                            var name = document.createTextNode(name1);
+                            a.appendChild(name);
+                            document.getElementById("mySelect" + n).appendChild(a);
+                                @foreach ($actors as $actor)
+                            var z = document.createElement("option");
+                            z.setAttribute("value", "{{$actor->id}}");
+                            var t = document.createTextNode("{{$actor->Name}}");
+                            z.appendChild(t);
+                            document.getElementById("mySelect" + n).appendChild(z);
+                            @endforeach
+                                n++;
+                        } else {
+                            alert('Sorry You Can only Add 3 Actors To The Movie');
+                        }
+                    }
+                </script>
+                {!! Form::label('Actor Name','Actor Name') !!}
+                @foreach ($movie->actors as $act)
+                    {{--                    <select name="Actor" +$n class="form-control">--}}
+                    {{--                        <option value="{{$movie->actor->id}}">{{$movie->actor->Name}}</option>--}}
+                    {{--                        @foreach ($actors as $actor)--}}
+                    {{--                            <option value="{{$actor->id}}">{{$actor->Name}}</option>--}}
+                    {{--                        @endforeach--}}
+                    {{--                    </select>--}}
+                    {{--                    {{$n++}}--}}
+                    <script>
+                        anotherActor('{{$act->id}}','{{$act->Name}}');
+                    </script>
                 @endforeach
-            </select>
+            </div>
+            <button form="form" onclick="anotherActor()" class="btn btn-primary">Add Another Actor</button>
+
             <br>
             {!! Form::label('Director Name','Director Name') !!}
             <select name="Director_Id" class="form-control">

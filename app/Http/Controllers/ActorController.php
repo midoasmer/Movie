@@ -7,6 +7,7 @@ use App\Models\Movie;
 use App\Models\Photo;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreatActorRequest;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class ActorController extends Controller
@@ -19,8 +20,10 @@ class ActorController extends Controller
     public function index()
     {
         $actors = Actor::simplePaginate(5);
+       // $actors = Actor::all();
 
         return view('Index_Actor', compact('actors'));
+       // return view('testing', compact('actors'));
     }
 
     /**
@@ -137,13 +140,17 @@ class ActorController extends Controller
     public function destroy($id)
     {
         $actor = Actor::findOrfail($id);
-        if($actor->Image)
-        {
-            unlink(public_path().$actor->photo->file);
-            Photo::where('id','=',$actor->Image)->delete();
+        if (DB::table('actor_movie')->where('actor_id', '=', $id)->exists()) {
+            Session::flash('deleted_actor', $actor->Name . ' : There is a Movies Have This Actor So Can not Delete it');
+            return redirect('/Actor');
+        } else {
+            if ($actor->Image) {
+                unlink(public_path() . $actor->photo->file);
+                Photo::where('id', '=', $actor->Image)->delete();
+            }
+            Actor::where('id', '=', $id)->delete();
+            Session::flash('deleted_actor', $actor->Name . ' : Actor has been deleted');
+            return redirect('/Actor');
         }
-        Actor::where('id', '=', $id)->delete();
-        Session::flash('deleted_actor',$actor->Name.' : Actor has been deleted');
-        return redirect('/Actor');
     }
 }

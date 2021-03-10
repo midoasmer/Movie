@@ -4,19 +4,43 @@
     <h1>Creat Movie</h1>
     {!! Form::open(['method'=>'POST','action'=>'App\Http\Controllers\MovieController@store','files'=>true]) !!}
     @csrf
-    <div class="form-group">
+    <div  class="form-group">
         {!! Form::label('Movie Name','Movie Name') !!}
         {!! Form::text('Name',null,['class'=>'form-control']) !!}
-
+        <div id = "add" class="form-group">
         {!! Form::label('Actor Name','Actor Name') !!}
-        <select name="Actor_Id" class="form-control" >
+        <select id="mySelect0" name="Actor0" class="form-control">
             @foreach ($actors as $actor)
                 <option value="{{$actor->id}}">{{$actor->Name}}</option>
             @endforeach
         </select>
-{{--        <form id="anotherActor">--}}
-{{--            <button form="anotherActor" onclick="anotherActor">Add Another Actor</button>--}}
-{{--        </form>--}}
+        </div>
+        <button form="form" onclick="anotherActor()" class="btn btn-primary">Add Another Actor</button>
+        <script>
+            var n = 1;
+
+            function anotherActor() {
+                "use strict";
+                if (n < 3) {
+                    var input = document.createElement("SELECT");
+                    input.setAttribute("id", "mySelect" + n);
+                    input.setAttribute('name', 'Actor' + n);
+                    input.setAttribute('class', "form-control");
+                    var parent = document.getElementById("add");
+                    parent.appendChild(input);
+                        @foreach ($actors as $actor)
+                    var z = document.createElement("option");
+                    z.setAttribute("value", "{{$actor->id}}");
+                    var t = document.createTextNode("{{$actor->Name}}");
+                    z.appendChild(t);
+                    document.getElementById("mySelect" + n).appendChild(z);
+                    @endforeach
+                        n++;
+                } else {
+                    alert('Sorry You Can only Add 3 Actors To The Movie');
+                }
+            }
+        </script>
         <br>
         {!! Form::label('Director Name','Director Name') !!}
         <select name="Director_Id" class="form-control">
@@ -77,10 +101,29 @@
         window.location = "/";
         {{Session::flash('no_permetion','You Dont Have Apermation')}}
     </script>
+    {{--this script to add anew actor --}}
     <script>
-        function anotherActor() {
-            var btn = document.createElement("BUTTON");
-            document.body.appendChild(btn);
+        var n = 1;
+
+        function addFeilde() {
+            "use strict";
+            if (n < 3) {
+                var input = document.createElement("SELECT");
+                input.setAttribute("id", "mySelect" + n);
+                input.setAttribute('name', 'Actor' + n);
+                var parent = document.getElementById("add");
+                parent.appendChild(input);
+                    @foreach ($actors as $actor)
+                var z = document.createElement("option");
+                z.setAttribute("value", "{{$actor->id}}");
+                var t = document.createTextNode("{{$actor->Name}}");
+                z.appendChild(t);
+                document.getElementById("mySelect" + n).appendChild(z);
+                @endforeach
+                    n++;
+            } else {
+                alert('Sorry You Can only Add 3 Actors To The Movie');
+            }
         }
     </script>
 @endif

@@ -7,6 +7,7 @@ use App\Models\Actor;
 use App\Models\Category;
 use App\Models\Director;
 use App\Models\Movie;
+use App\Models\MovieActor;
 use App\Models\Photo;
 use App\Models\Rating;
 use Illuminate\Http\Request;
@@ -52,6 +53,7 @@ class MovieController extends Controller
      */
     public function store(CreatMovieRequest $request)
     {
+
         //Cheich if the new movie have an photo
         if ($file = $request->file('image')) {
             $name = time() . $file->getClientOriginalName();
@@ -61,19 +63,42 @@ class MovieController extends Controller
         } else {
             $request['Image'] = 'Non';
         }
+
         //int the rating value
         $request['Rating'] = '0';
         $movie = new Movie();
         //Store all data in new movie
         $movie->Name = $request->Name;
         $movie->Director_Id = $request->Director_Id;
-        $movie->Actor_Id = $request->Actor_Id;
+        $movie->Actor_Id = $request->Actor0;
         $movie->Category_id = $request->Category_id;
         $movie->Description = $request->Description;
         $movie->Year = $request->Year;
         $movie->Image = $request->Image;
         $movie->Rating = $request->Rating;
         $movie->save();
+        //$movie = Movie::where('Name', '=', $request->Name)->get();
+//        return $movie[0]->id;
+        DB::table('actor_movie')->insert([
+            'movie_id' => $movie->id,
+            'actor_id' => $request->Actor0
+        ]);
+        if (isset($request->Actor1)) {
+            if ($request->Actor1 != $request->Actor0) {
+                DB::table('actor_movie')->insert([
+                    'movie_id' => $movie->id,
+                    'actor_id' => $request->Actor1
+                ]);
+            }
+        }
+        if (isset($request->Actor2)) {
+            if ($request->Actor2 != $request->Actor0 && $request->Actor2 != $request->Actor1) {
+                DB::table('actor_movie')->insert([
+                    'movie_id' => $movie->id,
+                    'actor_id' => $request->Actor2
+                ]);
+            }
+        }
 
         Session::flash('created_movie', $request->Name . ' : has been created');
         return redirect('/Movie');
@@ -152,14 +177,13 @@ class MovieController extends Controller
                     'Image' => $photo->id,
                 ]);
             }
-        }
-        //if movie have photo check if the user edit the photo or not
-        else{
-            if ($file = $request->file('image')){
+        } //if movie have photo check if the user edit the photo or not
+        else {
+            if ($file = $request->file('image')) {
                 $name = time() . $file->getClientOriginalName();
                 $file->move('images', $name);
                 $photo = Photo::findOrfail($movie->Image);
-                unlink(public_path().$photo->file);
+                unlink(public_path() . $photo->file);
                 $photo->update([
                     'file' => $name,
                 ]);
@@ -196,12 +220,34 @@ class MovieController extends Controller
         $movie->update([
             'Name' => $request->Name,
             'Director_Id' => $request->Director_Id,
-            'Actor_Id' => $request->Actor_Id,
+            'Actor_Id' => $request->Actor0,
             'Description' => $request->Description,
             'Category_id' => $request->Category_id,
             'Year' => $request->Year,
             'Rating' => $newRate
         ]);
+        DB::table('actor_movie')->where('movie_id', '=', $id)->delete();
+        DB::table('actor_movie')->insert([
+            'movie_id' => $movie->id,
+            'actor_id' => $request->Actor0
+        ]);
+        if (isset($request->Actor1)) {
+            if ($request->Actor1 != $request->Actor0) {
+                DB::table('actor_movie')->insert([
+                    'movie_id' => $movie->id,
+                    'actor_id' => $request->Actor1
+                ]);
+
+            }
+        }
+        if (isset($request->Actor2)) {
+            if ($request->Actor2 != $request->Actor0 && $request->Actor2 != $request->Actor1) {
+                DB::table('actor_movie')->insert([
+                    'movie_id' => $movie->id,
+                    'actor_id' => $request->Actor2
+                ]);
+            }
+        }
         Session::flash('updated_movie', $request->Name . ' : has been updated');
         return redirect('/Movie');
 
@@ -216,12 +262,13 @@ class MovieController extends Controller
     public function destroy($id)
     {
         $movie = Movie::findOrfail($id);
-        if ($movie->Image) {
-            unlink(public_path().$movie->photo->file);
+        if (isset($movie->Image)&&$movie->Image!="Non") {
+            unlink(public_path() . $movie->photo->file);
             Photo::where('id', '=', $movie->Image)->delete();
         }
         Movie::where('id', '=', $id)->delete();
         Rating::where('movie_id', '=', $id)->delete();
+        DB::table('actor_movie')->where('movie_id', '=', $id)->delete();
         Session::flash('deleted_movie', $movie->Name . ' : Movie has been deleted');
         return redirect('/Movie');
     }

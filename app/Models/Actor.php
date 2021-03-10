@@ -27,4 +27,8 @@ class Actor extends Model
 
         return $this->belongsTo(Photo::class, 'Image', 'id');
     }
+    public function movies()
+    {
+        return $this->belongsToMany(Movie::class);
+    }
 }

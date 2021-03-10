@@ -41,9 +41,6 @@ class SearchController extends Controller
         $movies = Movie::where('Actor_ID', '=', $request->Actor_Id)
             ->where('Director_id', '=', $request->Director_Id)
             ->whereBetween('Year', [$request->EndYear, $request->StartYear])->simplePaginate(5);
-        //$movies = $movies->simplePaginate(2);
-        $actor = Actor::findOrfail($request->Actor_Id);
-        $director = Director::findOrfail($request->Director_Id);
         $startyear = $request->StartYear;
         $endyear = $request->EndYear;
         return view('Required_Movie', compact('movies'))

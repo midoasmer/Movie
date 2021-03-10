@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Director;
+use App\Models\Movie;
 use App\Models\Photo;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreatDirectorRequest;
@@ -35,7 +36,7 @@ class DirectorController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function store(CreatDirectorRequest $request)
@@ -64,44 +65,44 @@ class DirectorController extends Controller
 //        $director->birthdate = $request->birthdate;
 //        $director->gender = $request->gender;
 //        $director->save();
-        Session::flash('created_director',$request->Name.' : has been created');
+        Session::flash('created_director', $request->Name . ' : has been created');
         return redirect('/Director');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function show($id)
     {
-        $director =  Director ::findOrfail ($id);
-        return view('Show_Director',compact('director')) ;
+        $director = Director::findOrfail($id);
+        return view('Show_Director', compact('director'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function edit($id)
     {
-        $director =  Director ::findOrfail ($id);
+        $director = Director::findOrfail($id);
         return view('Edite_Director', compact('director'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function update(CreatDirectorRequest $request, $id)
     {
-        $director =  Director ::findOrfail ($id);
+        $director = Director::findOrfail($id);
 
         if ($file = $request->file('image')) {
             $name = time() . $file->getClientOriginalName();
@@ -122,26 +123,30 @@ class DirectorController extends Controller
 //        $director->birthdate = $request->birthdate;
 //        $director->gender = $request->gender;
 //        $director->save();
-        Session::flash('updated_director',$request->Name.' : has been updated');
+        Session::flash('updated_director', $request->Name . ' : has been updated');
         return redirect('/Director');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function destroy($id)
     {
         $director = Director::findOrfail($id);
-        if($director->Image)
-        {
-            unlink(public_path().$director->photo->file);
-            Photo::where('id','=',$director->Image)->delete();
+        if ($movie = Movie::where('Director_Id', '=', $id)->exists()) {
+            Session::flash('deleted_director', $director->Name . ' : There is a Movies Have This Directors So Can not Delete it');
+            return redirect('/Director');
+        } else {
+            if ($director->Image) {
+                unlink(public_path() . $director->photo->file);
+                Photo::where('id', '=', $director->Image)->delete();
+            }
+            Director::where('id', '=', $id)->delete();
+            Session::flash('deleted_director', $director->Name . ' : Director has been deleted');
+            return redirect('/Director');
         }
-        Director::where('id', '=', $id)->delete();
-        Session::flash('deleted_director',$director->Name.' : Director has been deleted');
-        return redirect('/Director');
     }
 }

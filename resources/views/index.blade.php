@@ -34,8 +34,6 @@
             <th>Photo</th>
             <th>Movie Name</th>
             <th>Actor Name</th>
-            <th>Actor Name</th>
-            <th>Actor Name</th>
             <th>Director Name</th>
             <th> Category</th>
             <th>Description</th>
@@ -57,9 +55,12 @@
                 <td>{{$movie->id}}</td>
                 <td><img height="50" src="{{$movie->photo ? $movie->photo->file :'http://placehold.it/50x50'}}"></td>
                 <td>{{$movie->Name}}</td>
-                <td>{{$movie->actor->Name}}</td>
-                <td>{{$movie->actor->Name}}</td>
-                <td>{{$movie->actor->Name}}</td>
+                <td>
+                    @foreach ($movie->actors as $act)
+                        {{$act->Name}}
+                        <br>
+                    @endforeach
+                </td>
                 <td>{{$movie->director->Name}}</td>
                 <td>{{$movie->category->Name}}</td>
                 <td>{{$movie->Description}}</td>
@@ -71,18 +72,18 @@
                             <input type="submit" value="Rate">
                         </form>
                     </td>
-                @if(Auth::user()->isAdmin())
-                    <td>
-                        <form method="GET" action="/Movie/{{$movie->id}}/edit">
-                            <input type="submit" value="Update" class='btn btn-primary'>
-                        </form>
-                    </td>
-                    <td>
-                        {!! Form::open(['method'=>'DELETE','action'=>['App\Http\Controllers\MovieController@destroy',$movie->id]]) !!}
-                        {!! Form::submit('Delete Movie',['class'=>'btn btn-danger']) !!}
-                        {!! Form:: close() !!}
-                    </td>
-                @endif
+                    @if(Auth::user()->isAdmin())
+                        <td>
+                            <form method="GET" action="/Movie/{{$movie->id}}/edit">
+                                <input type="submit" value="Update" class='btn btn-primary'>
+                            </form>
+                        </td>
+                        <td>
+                            {!! Form::open(['method'=>'DELETE','action'=>['App\Http\Controllers\MovieController@destroy',$movie->id]]) !!}
+                            {!! Form::submit('Delete Movie',['class'=>'btn btn-danger']) !!}
+                            {!! Form:: close() !!}
+                        </td>
+                    @endif
                 @endif
             </tr>
         @endforeach

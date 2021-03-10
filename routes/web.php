@@ -55,9 +55,9 @@ Route::group(['middleware'=>'admin'],function (){
 //Route::resource('/Director',"App\Http\Controllers\DirectorController");
 
 //test route
-//Route::get('/rate', function () {
-//    return view('Rating');
-//});
+Route::get('/test', function () {
+    return view('testing');
+});
 
 
 

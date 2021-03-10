@@ -26,7 +26,7 @@ class CreatMovieRequest extends FormRequest
         return [
             'Name'          => 'required|unique:movies',
             'Director_Id' =>  'required',
-            'Actor_Id'    =>  'required',
+            'Actor0'    =>  'required',
             'Description'   =>  'required',
             'Year'          =>  'required|integer',
         ];

@@ -163,94 +163,106 @@ class MovieController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $movie = Movie::findOrfail($id);
-        $user = Auth::user();
-        //check if the movie have photo or not
-        if ($movie->Image === 'Non') {
-            //if movie dont have photo check if the user add photo or not
-            if ($file = $request->file('image')) {
-                $name = time() . $file->getClientOriginalName();
-                $file->move('images', $name);
-                $photo = Photo::create(['file' => $name]);
-                $request['Image'] = $photo->id;
-                $movie->update([
-                    'Image' => $photo->id,
-                ]);
-            }
-        } //if movie have photo check if the user edit the photo or not
-        else {
-            if ($file = $request->file('image')) {
-                $name = time() . $file->getClientOriginalName();
-                $file->move('images', $name);
-                $photo = Photo::findOrfail($movie->Image);
-                unlink(public_path() . $photo->file);
-                $photo->update([
-                    'file' => $name,
-                ]);
-            }
-        }
-        //check if user select rate or not
-        if ($request->Rate !== "No Rate") {
-            //check if the user had rated this movie before or not
-            if ($check = Rating::where('movie_id', $movie->id)->where('user_id', $user->id)->exists()) {
-                Rating::where('movie_id', $movie->id)
-                    ->where('user_id', $user->id)
-                    ->update([
-                        'rate' => $request->Rate,
-                        'Review' => $request->Review
-                    ]);
-                //function to sum the new rate
-                $newRate = $this->newRate($movie->id);
-            } else {
-                $rate = new Rating();
-                $rate->movie_id = $movie->id;
-                $rate->user_id = $user->id;
-                $rate->rate = $request->Rate;
-                if ($request->filled('Review')) {
-                    $rate->review = $request->Review;
-                } else {
-                    $rate->review = "No Review";
-                }
-                $rate->save();
-                $newRate = $this->newRate($movie->id);
-            }
+        //chick if the user delete all actors from movie or not
+        if  ($request->Actor0 === '0' &&
+            ($request->Actor1 === '0' || !(isset($request->Actor1))) &&
+            ($request->Actor2 === '0' || !(isset($request->Actor2)))) {
+
+            Session::flash('updated_movie', $request->Name . ' : Can Not be update You Must Select One Actor At Lest');
+            return redirect()->route('Movie.edit', ['Movie' => $id]);
+
         } else {
-            $newRate = $movie->Rating;
-        }
-        $movie->update([
-            'Name' => $request->Name,
-            'Director_Id' => $request->Director_Id,
-            'Actor_Id' => $request->Actor0,
-            'Description' => $request->Description,
-            'Category_id' => $request->Category_id,
-            'Year' => $request->Year,
-            'Rating' => $newRate
-        ]);
-        DB::table('actor_movie')->where('movie_id', '=', $id)->delete();
-        DB::table('actor_movie')->insert([
-            'movie_id' => $movie->id,
-            'actor_id' => $request->Actor0
-        ]);
-        if (isset($request->Actor1)) {
-            if ($request->Actor1 != $request->Actor0) {
+            $movie = Movie::findOrfail($id);
+            $user = Auth::user();
+            //check if the movie have photo or not
+            if ($movie->Image === 'Non') {
+                //if movie dont have photo check if the user add photo or not
+                if ($file = $request->file('image')) {
+                    $name = time() . $file->getClientOriginalName();
+                    $file->move('images', $name);
+                    $photo = Photo::create(['file' => $name]);
+                    $request['Image'] = $photo->id;
+                    $movie->update([
+                        'Image' => $photo->id,
+                    ]);
+                }
+            } //if movie have photo check if the user edit the photo or not
+            else {
+                if ($file = $request->file('image')) {
+                    $name = time() . $file->getClientOriginalName();
+                    $file->move('images', $name);
+                    $photo = Photo::findOrfail($movie->Image);
+                    unlink(public_path() . $photo->file);
+                    $photo->update([
+                        'file' => $name,
+                    ]);
+                }
+            }
+            //check if user select rate or not
+            if ($request->Rate !== "No Rate") {
+                //check if the user had rated this movie before or not
+                if ($check = Rating::where('movie_id', $movie->id)->where('user_id', $user->id)->exists()) {
+                    Rating::where('movie_id', $movie->id)
+                        ->where('user_id', $user->id)
+                        ->update([
+                            'rate' => $request->Rate,
+                            'Review' => $request->Review
+                        ]);
+                    //function to sum the new rate
+                    $newRate = $this->newRate($movie->id);
+                } else {
+                    $rate = new Rating();
+                    $rate->movie_id = $movie->id;
+                    $rate->user_id = $user->id;
+                    $rate->rate = $request->Rate;
+                    if ($request->filled('Review')) {
+                        $rate->review = $request->Review;
+                    } else {
+                        $rate->review = "No Review";
+                    }
+                    $rate->save();
+                    $newRate = $this->newRate($movie->id);
+                }
+            } else {
+                $newRate = $movie->Rating;
+            }
+            $movie->update([
+                'Name' => $request->Name,
+                'Director_Id' => $request->Director_Id,
+                'Actor_Id' => $request->Actor0,
+                'Description' => $request->Description,
+                'Category_id' => $request->Category_id,
+                'Year' => $request->Year,
+                'Rating' => $newRate
+            ]);
+            DB::table('actor_movie')->where('movie_id', '=', $id)->delete();
+            if ($request->Actor0 != '0') {
                 DB::table('actor_movie')->insert([
                     'movie_id' => $movie->id,
-                    'actor_id' => $request->Actor1
-                ]);
-
-            }
-        }
-        if (isset($request->Actor2)) {
-            if ($request->Actor2 != $request->Actor0 && $request->Actor2 != $request->Actor1) {
-                DB::table('actor_movie')->insert([
-                    'movie_id' => $movie->id,
-                    'actor_id' => $request->Actor2
+                    'actor_id' => $request->Actor0
                 ]);
             }
-        }
-        Session::flash('updated_movie', $request->Name . ' : has been updated');
-        return redirect('/Movie');
+            if (isset($request->Actor1)) {
+                if ($request->Actor1 != $request->Actor0 && $request->Actor1 != '0') {
+                    DB::table('actor_movie')->insert([
+                        'movie_id' => $movie->id,
+                        'actor_id' => $request->Actor1
+                    ]);
 
+                }
+            }
+            if (isset($request->Actor2)) {
+                if ($request->Actor2 != $request->Actor0 && $request->Actor2 != $request->Actor1
+                    && $request->Actor2 != '0') {
+                    DB::table('actor_movie')->insert([
+                        'movie_id' => $movie->id,
+                        'actor_id' => $request->Actor2
+                    ]);
+                }
+            }
+            Session::flash('updated_movie', $request->Name . ' : has been updated');
+            return redirect('/Movie');
+        }
     }
 
     /**
@@ -262,7 +274,7 @@ class MovieController extends Controller
     public function destroy($id)
     {
         $movie = Movie::findOrfail($id);
-        if (isset($movie->Image)&&$movie->Image!="Non") {
+        if (isset($movie->Image) && $movie->Image != "Non") {
             unlink(public_path() . $movie->photo->file);
             Photo::where('id', '=', $movie->Image)->delete();
         }

@@ -15,7 +15,8 @@
             <tr>
                 <th>
                     <select name="Actor_Id" class="form-control">
-                        <option value="{{$movies[0]->actor->id}}">{{$movies[0]->actor->Name}}</option>
+                        <option value="{{$actor_id}}">{{$actor_name}}</option>
+                        <option value="0">Select Actor</option>
                         @foreach ($actors as $actor1)
                             <option value="{{$actor1->id}}">{{$actor1->Name}}</option>
                         @endforeach
@@ -23,7 +24,8 @@
                 </th>
                 <th>
                     <select name="Director_Id" class="form-control">
-                        <option value="{{$movies[0]->director->id}}">{{$movies[0]->director->Name}}</option>
+                        <option value="{{$director_id}}">{{$director_name}}</option>
+                        <option value="0">Select Director</option>
                         @foreach ($directors as $director1)
                             <option value="{{$director1->id}}">{{$director1->Name}}</option>
                         @endforeach
@@ -34,7 +36,7 @@
                         <option value="{{ $startyear }}">{{ $startyear }}</option>
                         {{ $last= date('Y')-80 }}
                         {{ $now = date('Y') }}
-                        @for ($i = $now; $i >= $last; $i--)
+                        @for ($i = $last; $i <= $now; $i++)
                             <option value="{{ $i }}">{{ $i }}</option>
                         @endfor
                     </select>
@@ -44,7 +46,7 @@
                         <option value="{{$endyear}}">{{$endyear}}</option>
                         {{ $last= date('Y')-80 }}
                         {{ $now = date('Y') }}
-                        @for ($i = $last; $i <= $now; $i++)
+                        @for ($i = $now; $i >= $last; $i--)
                             <option value="{{ $i }}">{{ $i }}</option>
                         @endfor
                     </select>
@@ -69,8 +71,6 @@
                 <th>Photo</th>
                 <th>Movie Name</th>
                 <th>Actor Name</th>
-                <th>Actor Name</th>
-                <th>Actor Name</th>
                 <th>Director Name</th>
                 <th> Category</th>
                 <th>Description</th>
@@ -91,9 +91,12 @@
                     <td>{{$movie->id}}</td>
                     <td><img height="50" src="{{$movie->photo ? $movie->photo->file :'http://placehold.it/50x50'}}"></td>
                     <td>{{$movie->Name}}</td>
-                    <td>{{$movie->actor->Name}}</td>
-                    <td>{{$movie->actor->Name}}</td>
-                    <td>{{$movie->actor->Name}}</td>
+                    <td>
+                        @foreach ($movie->actors as $act)
+                            {{$act->Name}}
+                            <br>
+                        @endforeach
+                    </td>
                     <td>{{$movie->director->Name}}</td>
                     <td>{{$movie->category->Name}}</td>
                     <td>{{$movie->Description}}</td>
@@ -122,9 +125,9 @@
             @endforeach
             </tbody>
         </table>
-        {{--            {{ $movies->links() }}--}}
-        {!! $movies->appends(Request::all())->links() !!}
-        {{--        {!! $movies->render() !!}.--}}
+{{--                    {{ $movies->links() }}--}}
+{{--        {!! $movies->appends(Request::all())->links() !!}--}}
+{{--                {!! $movies->render() !!}.--}}
     </ul>
 
 @endsection

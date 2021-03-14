@@ -62,7 +62,12 @@
                     @endforeach
                 </td>
                 <td>{{$movie->director->Name}}</td>
-                <td>{{$movie->category->Name}}</td>
+                <td>
+                    @foreach ($movie->categories as $cat)
+                        {{$cat->Name}}
+                        <br>
+                    @endforeach
+                </td>
                 <td>{{$movie->Description}}</td>
                 <td>{{$movie->Year}}</td>
                 <td>{{$movie->Rating}}</td>

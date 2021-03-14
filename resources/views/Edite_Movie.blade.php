@@ -13,23 +13,24 @@
             <div id="add" class="form-group">
                 {!! Form::label('Actor Name','Actor Name') !!}
                 @php
-                $count=0;
+                    $count=0;
                 @endphp
                 @foreach ($movie->actors as $act)
                     <select id="mySelect0" name="Actor{{$count}}" class="form-control">
                         <option value="{{$act->id}}">{{$act->Name}}</option>
-                        <option value="0">Select Actor</option>
-                    @foreach ($actors as $actor)
-                        <option value="{{$actor->id}}">{{$actor->Name}}</option>
-                    @endforeach
+                        <option value="0">Delete Actor</option>
+                        @foreach ($actors as $actor)
+                            <option value="{{$actor->id}}">{{$actor->Name}}</option>
+                        @endforeach
                     </select>
-                @php
-                    $count++;
-                @endphp
+                    @php
+                        $count++;
+                    @endphp
                 @endforeach
             </div>
-{{--        the function in the button in {public/js/app2}--}}
-            <button form="form" onclick="anotherActor1('0','Select Actor',{{$actors}},{{$count}})" class="btn btn-primary">
+            {{--        the function in the button in {public/js/app2}--}}
+            <button form="form" onclick="anotherActor1('0','Select Actor',{{$actors}},{{$count}})"
+                    class="btn btn-primary">
                 Add Another Actor
             </button>
             <br>
@@ -41,13 +42,29 @@
                 @endforeach
             </select>
             <br>
-            {!! Form::label('Category','Category') !!}
-            <select name="Category_id" class="form-control">
-                <option value="{{$movie->category->id}}">{{$movie->category->Name}}</option>
-                @foreach ($categories as $category)
-                    <option value="{{$category->id}}">{{$category->Name}}</option>
+            <div id="addCategory" class="form-group">
+                {!! Form::label('Category','Category') !!}
+                @php
+                    $count1=0;
+                @endphp
+                @foreach ($movie->categories as $cat)
+                    <select id="categorySelect0" name="Category{{$count1}}" class="form-control">
+                        <option value="{{$cat->id}}">{{$cat->Name}}</option>
+                        <option value="0">Delete Category</option>
+                    @foreach ($categories as $category)
+                        <option value="{{$category->id}}">{{$category->Name}}</option>
+                    @endforeach
+                </select>
+                    @php
+                        $count1++;
+                    @endphp
                 @endforeach
-            </select>
+            </div>
+            {{--        the function in the button in {public/js/app2}--}}
+            <button form="form" onclick="anotherCategory1('0','Select Category',{{$categories}},{{$count1}})"
+                    class="btn btn-primary">
+                Add Another Category
+            </button>
             <br>
 
             {!! Form::label('Description','Description') !!}

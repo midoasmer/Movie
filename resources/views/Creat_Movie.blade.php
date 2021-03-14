@@ -12,30 +12,6 @@
             <select id="mySelect0" name="Actor0" class="form-control">
                 @foreach ($actors as $actor)
                     <option value="{{$actor->id}}">{{$actor->Name}}</option>
-{{--                    <script>--}}
-{{--                        var n = 1;--}}
-{{--                        function anotherActor() {--}}
-{{--                            "use strict";--}}
-{{--                            if (n < 3) {--}}
-{{--                                var input = document.createElement("SELECT");--}}
-{{--                                input.setAttribute("id", "mySelect" + n);--}}
-{{--                                input.setAttribute('name', 'Actor' + n);--}}
-{{--                                input.setAttribute('class', "form-control");--}}
-{{--                                var parent = document.getElementById("add");--}}
-{{--                                parent.appendChild(input);--}}
-{{--                                    @foreach ($actors as $actor)--}}
-{{--                                var z = document.createElement("option");--}}
-{{--                                z.setAttribute("value", "{{$actor->id}}");--}}
-{{--                                var t = document.createTextNode("{{$actor->Name}}");--}}
-{{--                                z.appendChild(t);--}}
-{{--                                document.getElementById("mySelect" + n).appendChild(z);--}}
-{{--                                @endforeach--}}
-{{--                                    n++;--}}
-{{--                            } else {--}}
-{{--                                alert('Sorry You Can only Add 3 Actors To The Movie');--}}
-{{--                            }--}}
-{{--                        }--}}
-{{--                    </script>--}}
                 @endforeach
             </select>
         </div>
@@ -48,12 +24,15 @@
             @endforeach
         </select>
         <br>
+        <div id="addcategory" class="form-group">
         {!! Form::label('Category','Category') !!}
-        <select name="Category_id" class="form-control">
+        <select id="categorySelect0" name="Category0" class="form-control">
             @foreach ($categories as $category)
                 <option value="{{$category->id}}">{{$category->Name}}</option>
             @endforeach
         </select>
+        </div>
+        <button form="form" onclick="anotherCategory({{$categories}})" class="btn btn-primary">Add Another Category</button>
         <br>
         {!! Form::label('Description','Description') !!}
         {!! Form::text('Description',null,['class'=>'form-control']) !!}

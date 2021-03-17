@@ -7,6 +7,7 @@
         <tr>
             <th>Actor Name</th>
             <th>Director Name</th>
+            <th>Category</th>
             <th>From</th>
             <th>To</th>
         </tr>
@@ -24,6 +25,14 @@
                     <option value="0">Select Director</option>
                     @foreach ($directors as $director1)
                         <option value="{{$director1->id}}">{{$director1->Name}}</option>
+                    @endforeach
+                </select>
+            </th>
+            <th>
+                <select name="Category" class="form-control">
+                    <option value="0">Select Category</option>
+                    @foreach ($categories as $category1)
+                        <option value="{{$category1->id}}">{{$category1->Name}}</option>
                     @endforeach
                 </select>
             </th>

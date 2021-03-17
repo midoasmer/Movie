@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Actor;
+use App\Models\Category;
 use App\Models\Director;
 use App\Models\Movie;
 use Illuminate\Http\Request;
@@ -18,7 +19,9 @@ class VisitorController extends Controller
     {
         $directors = Director::all();
         $actors = Actor::all();
-        return view('visitor_page',compact('actors'),compact('directors'));
+        $categories = Category::all();
+        return view('visitor_page',compact('actors'),compact('directors'))
+            ->with(compact('categories'));
     }
 
     public function all_movie()

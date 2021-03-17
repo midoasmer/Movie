@@ -9,6 +9,7 @@
             <tr>
                 <th>Actor Name</th>
                 <th>Director Name</th>
+                <th>Category</th>
                 <th>From</th>
                 <th>To</th>
             </tr>
@@ -28,6 +29,15 @@
                         <option value="0">Select Director</option>
                         @foreach ($directors as $director1)
                             <option value="{{$director1->id}}">{{$director1->Name}}</option>
+                        @endforeach
+                    </select>
+                </th>
+                <th>
+                    <select name="Category" class="form-control">
+                        <option value="{{$category_id}}">{{$category_name}}</option>
+                        <option value="0">Select Category</option>
+                        @foreach ($categories as $category1)
+                            <option value="{{$category1->id}}">{{$category1->Name}}</option>
                         @endforeach
                     </select>
                 </th>
@@ -86,10 +96,15 @@
             </tr>
             </thead>
             <tbody>
+            @if($t===0)
+            No Movie Founded
+            @else
+                {{$t}}    Movie Founded
             @foreach($movies as $movie)
                 <tr>
                     <td>{{$movie->id}}</td>
-                    <td><img height="50" src="{{$movie->photo ? $movie->photo->file :'http://placehold.it/50x50'}}"></td>
+                    <td><img height="50" src="{{$movie->photo ? $movie->photo->file :'http://placehold.it/50x50'}}">
+                    </td>
                     <td>{{$movie->Name}}</td>
                     <td>
                         @foreach ($movie->actors as $act)
@@ -98,7 +113,12 @@
                         @endforeach
                     </td>
                     <td>{{$movie->director->Name}}</td>
-                    <td>{{$movie->category->Name}}</td>
+                    <td>
+                        @foreach ($movie->categories as $cat)
+                            {{$cat->Name}}
+                            <br>
+                        @endforeach
+                    </td>
                     <td>{{$movie->Description}}</td>
                     <td>{{$movie->Year}}</td>
                     <td>{{$movie->Rating}}</td>
@@ -123,11 +143,12 @@
                     @endif
                 </tr>
             @endforeach
+            @endif
             </tbody>
         </table>
-{{--                    {{ $movies->links() }}--}}
-{{--        {!! $movies->appends(Request::all())->links() !!}--}}
-{{--                {!! $movies->render() !!}.--}}
+        {{--                    {{ $movies->links() }}--}}
+        {{--        {!! $movies->appends(Request::all())->links() !!}--}}
+        {{--                {!! $movies->render() !!}--}}
     </ul>
 
 @endsection
